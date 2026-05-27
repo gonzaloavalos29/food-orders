@@ -1,0 +1,102 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  CUSTOMER
+  STAFF
+  ADMIN
+}
+
+enum ProductCategory {
+  PIZZA
+  BURGER
+  FRIES
+  DRINK
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PREPARING
+  READY
+  DELIVERED
+  CANCELLED
+}
+
+model User {
+  id           String   @id
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         UserRole @default(CUSTOMER)
+  createdAt    DateTime @default(now())
+
+  cart   Cart?
+  orders Order[]
+}
+
+model Product {
+  id            String          @id
+  name          String
+  description   String          @default("")
+  priceInCents  Int
+  currency      String          @default("ARS")
+  category      ProductCategory
+  available     Boolean         @default(true)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  cartItems  CartItem[]
+  orderItems OrderItem[]
+}
+
+model Cart {
+  id     String     @id @default(uuid())
+  userId String     @unique
+  user   User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items  CartItem[]
+}
+
+model CartItem {
+  id            String  @id @default(uuid())
+  cartId        String
+  cart          Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  productId     String
+  product       Product @relation(fields: [productId], references: [id])
+  productName   String
+  unitPriceInCents Int
+  currency      String  @default("ARS")
+  quantity      Int
+
+  @@unique([cartId, productId])
+}
+
+model Order {
+  id        String      @id
+  userId    String
+  user      User        @relation(fields: [userId], references: [id])
+  status    OrderStatus @default(PENDING)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  items OrderItem[]
+}
+
+model OrderItem {
+  id               String  @id @default(uuid())
+  orderId          String
+  order            Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId        String
+  product          Product @relation(fields: [productId], references: [id])
+  productName      String
+  unitPriceInCents Int
+  currency         String  @default("ARS")
+  quantity         Int
+}

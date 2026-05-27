@@ -1,0 +1,24 @@
+.fo-card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+}
+.fo-card--unavailable { opacity: 0.6; }
+.fo-card__category {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #1d3557;
+  font-weight: 600;
+}
+.fo-card__name { margin: 0; font-size: 1.1rem; }
+.fo-card__description { margin: 0; color: #555; font-size: 0.9rem; min-height: 2.2em; }
+.fo-card__footer {
+  display: flex; justify-content: space-between; align-items: center; margin-top: auto;
+}
+.fo-money { font-weight: 700; color: #e63946; }

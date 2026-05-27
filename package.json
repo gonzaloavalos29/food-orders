@@ -1,0 +1,25 @@
+{
+  "name": "food-orders",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "yarn@4.1.0",
+  "workspaces": [
+    "domain",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "yarn workspaces foreach -A run build",
+    "test": "yarn workspaces foreach -A run test",
+    "domain:test": "yarn workspace @food-orders/domain test",
+    "domain:build": "yarn workspace @food-orders/domain build",
+    "backend:dev": "yarn workspace @food-orders/backend dev",
+    "backend:build": "yarn workspace @food-orders/backend build",
+    "backend:start": "yarn workspace @food-orders/backend start",
+    "frontend:dev": "yarn workspace @food-orders/frontend dev",
+    "frontend:build": "yarn workspace @food-orders/frontend build",
+    "frontend:storybook": "yarn workspace @food-orders/frontend storybook"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
+}

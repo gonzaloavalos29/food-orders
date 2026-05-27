@@ -1,0 +1,18 @@
+.fo-catalog { padding: 20px; max-width: 1000px; margin: 0 auto; }
+.fo-catalog__filters { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.fo-tab {
+  border: 1px solid #ccc;
+  background: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 500;
+}
+.fo-tab--active { background: #1d3557; color: white; border-color: #1d3557; }
+.fo-catalog__grid {
+  display: grid; gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+.fo-toast { padding: 8px 14px; border-radius: 6px; margin-bottom: 12px; }
+.fo-toast--ok { background: #b9f5c4; color: #14532d; }
+.fo-toast--err { background: #f5b9b9; color: #6a040f; }

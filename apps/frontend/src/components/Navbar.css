@@ -1,0 +1,13 @@
+.fo-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #1d3557;
+  color: white;
+  padding: 12px 24px;
+}
+.fo-nav__brand { color: white; font-weight: 700; text-decoration: none; font-size: 1.1rem; }
+.fo-nav__links, .fo-nav__auth { display: flex; gap: 16px; align-items: center; }
+.fo-nav__links a, .fo-nav__auth a { color: white; text-decoration: none; font-weight: 500; }
+.fo-nav__links a:hover, .fo-nav__auth a:hover { text-decoration: underline; }
+.fo-nav__user { font-size: 0.9rem; opacity: 0.9; }

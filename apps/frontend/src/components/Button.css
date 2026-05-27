@@ -1,0 +1,19 @@
+.fo-btn {
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: filter 0.15s ease, transform 0.05s ease;
+  font-family: inherit;
+}
+.fo-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.fo-btn:hover:not(:disabled) { filter: brightness(1.08); }
+.fo-btn:active:not(:disabled) { transform: translateY(1px); }
+
+.fo-btn--primary { background: #e63946; color: white; }
+.fo-btn--secondary { background: #1d3557; color: white; }
+.fo-btn--danger { background: #6a040f; color: white; }
+
+.fo-btn--sm { padding: 4px 10px; font-size: 0.85rem; }
+.fo-btn--md { padding: 8px 16px; font-size: 1rem; }
+.fo-btn--lg { padding: 12px 24px; font-size: 1.1rem; }
