@@ -54,6 +54,7 @@ pedidos_comida/
         ├── .storybook/           # Configuración de Storybook
         └── src/
             ├── api/              # Cliente HTTP tipado (DTOs + fetcher)
+            ├── services/         # Capa de aplicación: lógica de cliente (cart/orders/products) sobre el cliente HTTP
             ├── auth/             # AuthContext (login/registro/logout en localStorage)
             ├── components/       # Button, Money, ProductCard, CartItemRow, OrderCard, Navbar (con .stories.tsx)
             ├── pages/            # Catalog, Login, Register, Cart, Orders, OrderDetail, AdminProducts
@@ -267,18 +268,21 @@ Los tests usan **fakes en memoria** (no mocks) que viven en `__test-helpers__/`.
 El frontend tiene su propia suite de tests unitarios y de integración, sobre **Vitest + React Testing Library + jsdom**:
 
 ```
-src/api/client.test.ts            — adjunta el JWT, lanza ApiError, query strings, 204 (fetch mockeado)
-src/auth/AuthContext.test.tsx     — login/register/logout + restauración de sesión desde localStorage
-src/components/Money.test.tsx     — formateo de moneda y conversión de centavos
-src/components/Button.test.tsx    — variantes, tamaños, onClick, estado disabled
+src/api/client.test.ts               — adjunta el JWT, lanza ApiError, query strings, 204 (fetch mockeado)
+src/auth/AuthContext.test.tsx        — login/register/logout + restauración de sesión desde localStorage
+src/services/cartService.test.ts     — regla "cantidad 0 = quitar", defaults, unwrapping
+src/services/ordersService.test.ts   — filtrado de cocina, avance de estado, checkout
+src/services/productsService.test.ts — mapeo de categoría "ALL", listado admin, toggle de disponibilidad
+src/components/Money.test.tsx        — formateo de moneda y conversión de centavos
+src/components/Button.test.tsx       — variantes, tamaños, onClick, estado disabled
 src/components/CartItemRow.test.tsx  — controles de cantidad, quitar, modo solo-lectura
 src/components/ProductCard.test.tsx  — disponible/no disponible, callback onAdd
 src/components/OrderCard.test.tsx    — etiqueta de estado, avance de estados, cancelar
 ```
 
-→ **36 tests / 7 suites — todos pasan.**
+→ **50 tests / 10 suites — todos pasan.**
 
-La capa de API se testea **mockeando `fetch`** (sin backend real) y el `AuthContext` se prueba aislado mockeando el cliente de API, verificando comportamiento (estado y persistencia) y no llamadas internas.
+La capa de API se testea **mockeando `fetch`** (sin backend real); los **servicios** y el `AuthContext` se prueban aislados mockeando el cliente de API, verificando comportamiento (estado y persistencia) y no llamadas internas.
 
 ---
 
