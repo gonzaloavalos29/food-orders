@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useState } from 'react';
-import { api } from '../api/client';
 import type { ProductCategory, ProductDto } from '../api/types';
+import { productsService } from '../services/productsService';
 import { Button } from '../components/Button';
 import { Money } from '../components/Money';
 
@@ -12,28 +12,28 @@ export function AdminProductsPage() {
   const [form, setForm] = useState({ name: '', description: '', priceInCents: 100000, category: 'PIZZA' as ProductCategory, available: true });
 
   const refresh = () =>
-    api.products.list({ includeUnavailable: true })
-      .then(r => setProducts(r.products))
+    productsService.listAll()
+      .then(setProducts)
       .catch(e => setError(e.message));
   useEffect(() => { refresh(); }, []);
 
   const create = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      await api.products.create(form);
+      await productsService.create(form);
       setForm({ name: '', description: '', priceInCents: 100000, category: 'PIZZA', available: true });
       await refresh();
     } catch (err) { setError((err as Error).message); }
   };
 
   const toggle = async (p: ProductDto) => {
-    try { await api.products.update(p.id, { available: !p.available }); await refresh(); }
+    try { await productsService.setAvailable(p.id, !p.available); await refresh(); }
     catch (err) { setError((err as Error).message); }
   };
 
   const remove = async (p: ProductDto) => {
     if (!confirm(`¿Eliminar ${p.name}?`)) return;
-    try { await api.products.remove(p.id); await refresh(); }
+    try { await productsService.remove(p.id); await refresh(); }
     catch (err) { setError((err as Error).message); }
   };
 

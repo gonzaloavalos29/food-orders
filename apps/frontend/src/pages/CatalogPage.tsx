@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { api } from '../api/client';
 import type { ProductCategory, ProductDto } from '../api/types';
+import { productsService } from '../services/productsService';
+import { cartService } from '../services/cartService';
 import { ProductCard } from '../components/ProductCard';
 import { useAuth } from '../auth/AuthContext';
 import './CatalogPage.css';
@@ -24,9 +25,9 @@ export function CatalogPage() {
 
   useEffect(() => {
     setLoading(true);
-    api.products
-      .list({ category: category === 'ALL' ? undefined : category })
-      .then(r => setProducts(r.products))
+    productsService
+      .list(category)
+      .then(setProducts)
       .catch(e => setError(e.message))
       .finally(() => setLoading(false));
   }, [category]);
@@ -35,7 +36,7 @@ export function CatalogPage() {
     if (!user) { setError('Tenés que iniciar sesión para pedir.'); return; }
     setAdding(p.id);
     try {
-      await api.cart.add({ productId: p.id, quantity: 1 });
+      await cartService.add(p.id, 1);
       setMessage(`Agregado: ${p.name}`);
       setError(null);
     } catch (e) {

@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { api } from '../api/client';
 import type { OrderDto, OrderStatus } from '../api/types';
+import { ordersService } from '../services/ordersService';
 import { OrderCard } from '../components/OrderCard';
 import { useAuth } from '../auth/AuthContext';
-
-const KITCHEN_STATUSES: OrderStatus[] = ['PENDING', 'CONFIRMED', 'PREPARING', 'READY'];
 
 export function OrdersPage({ kitchen = false }: { kitchen?: boolean }) {
   const { user } = useAuth();
@@ -16,8 +14,7 @@ export function OrdersPage({ kitchen = false }: { kitchen?: boolean }) {
   const refresh = async () => {
     setLoading(true);
     try {
-      const { orders } = await api.orders.list();
-      setOrders(kitchen ? orders.filter(o => KITCHEN_STATUSES.includes(o.status)) : orders);
+      setOrders(await (kitchen ? ordersService.listKitchen() : ordersService.list()));
     } catch (e) { setError((e as Error).message); }
     finally { setLoading(false); }
   };
@@ -25,11 +22,11 @@ export function OrdersPage({ kitchen = false }: { kitchen?: boolean }) {
   useEffect(() => { refresh(); }, [kitchen]);
 
   const advance = async (id: string, next: OrderStatus) => {
-    try { await api.orders.updateStatus(id, next); await refresh(); }
+    try { await ordersService.advance(id, next); await refresh(); }
     catch (e) { setError((e as Error).message); }
   };
   const cancel = async (id: string) => {
-    try { await api.orders.cancel(id); await refresh(); }
+    try { await ordersService.cancel(id); await refresh(); }
     catch (e) { setError((e as Error).message); }
   };
 

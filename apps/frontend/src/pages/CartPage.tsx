@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { api } from '../api/client';
 import type { CartDto } from '../api/types';
+import { cartService } from '../services/cartService';
+import { ordersService } from '../services/ordersService';
 import { CartItemRow } from '../components/CartItemRow';
 import { Button } from '../components/Button';
 import { Money } from '../components/Money';
@@ -11,26 +12,24 @@ export function CartPage() {
   const [cart, setCart] = useState<CartDto | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const refresh = () => api.cart.get().then(r => setCart(r.cart)).catch(e => setError(e.message));
+  const refresh = () => cartService.get().then(setCart).catch(e => setError(e.message));
   useEffect(() => { refresh(); }, []);
 
   const updateQty = async (productId: string, qty: number) => {
     try {
-      const { cart } = qty === 0
-        ? await api.cart.remove(productId)
-        : await api.cart.update(productId, qty);
-      setCart(cart); setError(null);
+      setCart(await cartService.changeQuantity(productId, qty));
+      setError(null);
     } catch (e) { setError((e as Error).message); }
   };
 
   const remove = async (productId: string) => {
-    try { const { cart } = await api.cart.remove(productId); setCart(cart); }
+    try { setCart(await cartService.remove(productId)); }
     catch (e) { setError((e as Error).message); }
   };
 
   const checkout = async () => {
     try {
-      const { order } = await api.orders.checkout();
+      const order = await ordersService.checkout();
       navigate(`/orders/${order.id}`);
     } catch (e) { setError((e as Error).message); }
   };

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { api } from '../api/client';
 import type { OrderDto, OrderStatus } from '../api/types';
+import { ordersService } from '../services/ordersService';
 import { OrderCard } from '../components/OrderCard';
 import { useAuth } from '../auth/AuthContext';
 
@@ -13,7 +13,7 @@ export function OrderDetailPage() {
 
   const refresh = async () => {
     if (!id) return;
-    try { const { order } = await api.orders.get(id); setOrder(order); }
+    try { setOrder(await ordersService.get(id)); }
     catch (e) { setError((e as Error).message); }
   };
   useEffect(() => { refresh(); }, [id]);
@@ -25,11 +25,11 @@ export function OrderDetailPage() {
   const canCancel = user?.id === order.userId && (order.status === 'PENDING' || order.status === 'CONFIRMED');
 
   const advance = async (next: OrderStatus) => {
-    try { await api.orders.updateStatus(order.id, next); await refresh(); }
+    try { await ordersService.advance(order.id, next); await refresh(); }
     catch (e) { setError((e as Error).message); }
   };
   const cancel = async () => {
-    try { await api.orders.cancel(order.id); await refresh(); }
+    try { await ordersService.cancel(order.id); await refresh(); }
     catch (e) { setError((e as Error).message); }
   };
 
