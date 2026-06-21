@@ -11,12 +11,15 @@ export function OrdersPage({ kitchen = false }: { kitchen?: boolean }) {
   const { user } = useAuth();
   const [orders, setOrders] = useState<OrderDto[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const refresh = async () => {
+    setLoading(true);
     try {
       const { orders } = await api.orders.list();
       setOrders(kitchen ? orders.filter(o => KITCHEN_STATUSES.includes(o.status)) : orders);
     } catch (e) { setError((e as Error).message); }
+    finally { setLoading(false); }
   };
 
   useEffect(() => { refresh(); }, [kitchen]);
@@ -36,7 +39,8 @@ export function OrdersPage({ kitchen = false }: { kitchen?: boolean }) {
     <div style={{ padding: 20, maxWidth: 900, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
       <h2>{kitchen ? 'Cocina (pedidos activos)' : 'Pedidos'}</h2>
       {error && <div className="fo-toast fo-toast--err">{error}</div>}
-      {orders.length === 0 && <p>No hay pedidos.</p>}
+      {loading && <p role="status">Cargando pedidos…</p>}
+      {!loading && orders.length === 0 && <p>No hay pedidos.</p>}
       {orders.map(o => (
         <div key={o.id}>
           <OrderCard

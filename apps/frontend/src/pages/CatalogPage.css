@@ -13,6 +13,7 @@
   display: grid; gap: 16px;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
 }
+.fo-catalog__status { padding: 32px 0; text-align: center; color: #6b7280; font-weight: 500; }
 .fo-toast { padding: 8px 14px; border-radius: 6px; margin-bottom: 12px; }
 .fo-toast--ok { background: #b9f5c4; color: #14532d; }
 .fo-toast--err { background: #f5b9b9; color: #6a040f; }

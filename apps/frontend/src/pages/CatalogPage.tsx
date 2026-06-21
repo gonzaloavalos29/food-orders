@@ -19,22 +19,29 @@ export function CatalogPage() {
   const [category, setCategory] = useState<ProductCategory | 'ALL'>('ALL');
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [adding, setAdding] = useState<string | null>(null);
 
   useEffect(() => {
+    setLoading(true);
     api.products
       .list({ category: category === 'ALL' ? undefined : category })
       .then(r => setProducts(r.products))
-      .catch(e => setError(e.message));
+      .catch(e => setError(e.message))
+      .finally(() => setLoading(false));
   }, [category]);
 
   const handleAdd = async (p: ProductDto) => {
     if (!user) { setError('Tenés que iniciar sesión para pedir.'); return; }
+    setAdding(p.id);
     try {
       await api.cart.add({ productId: p.id, quantity: 1 });
       setMessage(`Agregado: ${p.name}`);
       setError(null);
     } catch (e) {
       setError((e as Error).message);
+    } finally {
+      setAdding(null);
     }
   };
 
@@ -53,11 +60,22 @@ export function CatalogPage() {
       </div>
       {message && <div className="fo-toast fo-toast--ok">{message}</div>}
       {error && <div className="fo-toast fo-toast--err">{error}</div>}
-      <div className="fo-catalog__grid">
-        {products.map(p => (
-          <ProductCard key={p.id} product={p} onAdd={user ? handleAdd : undefined} />
-        ))}
-      </div>
+      {loading ? (
+        <div className="fo-catalog__status" role="status">Cargando productos…</div>
+      ) : products.length === 0 ? (
+        <div className="fo-catalog__status">No hay productos en esta categoría.</div>
+      ) : (
+        <div className="fo-catalog__grid">
+          {products.map(p => (
+            <ProductCard
+              key={p.id}
+              product={p}
+              onAdd={user ? handleAdd : undefined}
+              disabled={adding === p.id}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
