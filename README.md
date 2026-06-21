@@ -224,10 +224,15 @@ npm run storybook        # http://localhost:6006
 ### Tests
 
 ```bash
-# desde la raíz
+# desde la raíz: corre los tests de todos los workspaces (dominio + frontend)
 npm test --workspaces
-# o solo dominio:
+
+# solo dominio (Jest):
 cd domain && npx jest
+
+# solo frontend (Vitest):
+npm run test --workspace @food-orders/frontend
+# en watch: npm run test:watch --workspace @food-orders/frontend
 ```
 
 ---
@@ -256,6 +261,24 @@ src/use-cases/orders/update-order-status.test.ts
 → **91 tests / 14 suites — todos pasan.**
 
 Los tests usan **fakes en memoria** (no mocks) que viven en `__test-helpers__/`. Eso permite asertar contra el estado real del repo y no contra "X fue llamado con Y", lo cual mantiene los tests robustos frente a refactors internos.
+
+### TDD en el frontend (Vitest + React Testing Library)
+
+El frontend tiene su propia suite de tests unitarios y de integración, sobre **Vitest + React Testing Library + jsdom**:
+
+```
+src/api/client.test.ts            — adjunta el JWT, lanza ApiError, query strings, 204 (fetch mockeado)
+src/auth/AuthContext.test.tsx     — login/register/logout + restauración de sesión desde localStorage
+src/components/Money.test.tsx     — formateo de moneda y conversión de centavos
+src/components/Button.test.tsx    — variantes, tamaños, onClick, estado disabled
+src/components/CartItemRow.test.tsx  — controles de cantidad, quitar, modo solo-lectura
+src/components/ProductCard.test.tsx  — disponible/no disponible, callback onAdd
+src/components/OrderCard.test.tsx    — etiqueta de estado, avance de estados, cancelar
+```
+
+→ **36 tests / 7 suites — todos pasan.**
+
+La capa de API se testea **mockeando `fetch`** (sin backend real) y el `AuthContext` se prueba aislado mockeando el cliente de API, verificando comportamiento (estado y persistencia) y no llamadas internas.
 
 ---
 
@@ -367,7 +390,8 @@ Cuando ya estaban todos los casos de uso, escribiendo los controllers del backen
 | Capa | Tecnología |
 |---|---|
 | Lenguaje | TypeScript 5 |
-| Tests | Jest + ts-jest |
+| Tests (dominio) | Jest + ts-jest |
+| Tests (frontend) | Vitest + React Testing Library + jsdom |
 | Backend | Express, Prisma 5, PostgreSQL 16, JWT, bcryptjs |
 | Frontend | Vite 5, React 18, React Router 6, Storybook 7 |
 | Container | Docker + Docker Compose |
