@@ -51,4 +51,16 @@ describe('cartService', () => {
     await cartService.changeQuantity('p1', -2);
     expect(api.cart.remove).toHaveBeenCalledWith('p1');
   });
+
+  it('removes an item directly', async () => {
+    mock(api.cart.remove).mockResolvedValue({ cart });
+    await expect(cartService.remove('p1')).resolves.toBe(cart);
+    expect(api.cart.remove).toHaveBeenCalledWith('p1');
+  });
+
+  it('clears the whole cart', async () => {
+    mock(api.cart.clear).mockResolvedValue({ cart });
+    await expect(cartService.clear()).resolves.toBe(cart);
+    expect(api.cart.clear).toHaveBeenCalled();
+  });
 });

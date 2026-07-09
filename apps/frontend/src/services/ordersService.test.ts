@@ -56,4 +56,18 @@ describe('ordersService', () => {
     mock(api.orders.checkout).mockResolvedValue({ order: o });
     await expect(ordersService.checkout()).resolves.toBe(o);
   });
+
+  it('gets a single order unwrapped', async () => {
+    const o = order('CONFIRMED');
+    mock(api.orders.get).mockResolvedValue({ order: o });
+    await expect(ordersService.get('o1')).resolves.toBe(o);
+    expect(api.orders.get).toHaveBeenCalledWith('o1');
+  });
+
+  it('cancels an order unwrapped', async () => {
+    const o = order('CANCELLED');
+    mock(api.orders.cancel).mockResolvedValue({ order: o });
+    await expect(ordersService.cancel('o1')).resolves.toBe(o);
+    expect(api.orders.cancel).toHaveBeenCalledWith('o1');
+  });
 });

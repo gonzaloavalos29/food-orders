@@ -48,4 +48,9 @@ describe('OrderCard', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Cancelar' }));
     expect(onCancel).toHaveBeenCalledOnce();
   });
+
+  it('falls back to ARS as currency when the order has no items', () => {
+    render(<OrderCard order={{ ...baseOrder, items: [], totalInCents: 0 }} />);
+    expect(screen.getByText(/Total:/)).toBeInTheDocument();
+  });
 });

@@ -48,4 +48,28 @@ describe('productsService', () => {
     await productsService.setAvailable('p1', false);
     expect(api.products.update).toHaveBeenCalledWith('p1', { available: false });
   });
+
+  it('gets a product unwrapped', async () => {
+    mock(api.products.get).mockResolvedValue({ product: { id: 'p1' } });
+    await expect(productsService.get('p1')).resolves.toEqual({ id: 'p1' });
+  });
+
+  it('creates a product unwrapped', async () => {
+    const input = { name: 'P', description: '', priceInCents: 100, category: 'PIZZA' as const, available: true };
+    mock(api.products.create).mockResolvedValue({ product: { id: 'p2' } });
+    await expect(productsService.create(input)).resolves.toEqual({ id: 'p2' });
+    expect(api.products.create).toHaveBeenCalledWith(input);
+  });
+
+  it('updates a product unwrapped', async () => {
+    mock(api.products.update).mockResolvedValue({ product: { id: 'p1', name: 'X' } });
+    await expect(productsService.update('p1', { name: 'X' })).resolves.toEqual({ id: 'p1', name: 'X' });
+    expect(api.products.update).toHaveBeenCalledWith('p1', { name: 'X' });
+  });
+
+  it('removes a product', async () => {
+    mock(api.products.remove).mockResolvedValue(undefined);
+    await productsService.remove('p1');
+    expect(api.products.remove).toHaveBeenCalledWith('p1');
+  });
 });

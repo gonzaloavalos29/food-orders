@@ -26,6 +26,12 @@ describe('AuthContext', () => {
     vi.clearAllMocks();
   });
 
+  it('useAuth throws when used outside of an AuthProvider', () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    expect(() => renderHook(() => useAuth())).toThrow(/AuthProvider/);
+    spy.mockRestore();
+  });
+
   it('starts unauthenticated', () => {
     const { result } = renderHook(() => useAuth(), { wrapper });
     expect(result.current.user).toBeNull();
@@ -79,5 +85,14 @@ describe('AuthContext', () => {
 
     await waitFor(() => expect(result.current.token).toBe('jwt-restored'));
     expect(result.current.user).toEqual(fakeUser);
+  });
+
+  it('discards a corrupt persisted session on mount', async () => {
+    localStorage.setItem('food-orders.auth', '{ not valid json');
+    const { result } = renderHook(() => useAuth(), { wrapper });
+
+    await waitFor(() => expect(localStorage.getItem('food-orders.auth')).toBeNull());
+    expect(result.current.user).toBeNull();
+    expect(result.current.token).toBeNull();
   });
 });
