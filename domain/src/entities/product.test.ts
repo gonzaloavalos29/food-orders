@@ -59,4 +59,43 @@ describe('Product', () => {
     const updated = p.update({ name: 'Otra' });
     expect(updated.id).toBe(p.id);
   });
+
+  it('rejects empty id', () => {
+    expect(() => Product.create({ ...baseProps, id: '  ' })).toThrow(ValidationError);
+  });
+
+  it('exposes description, createdAt and updatedAt', () => {
+    const p = Product.create(baseProps);
+    expect(p.description).toBe(baseProps.description);
+    expect(p.createdAt).toEqual(baseProps.createdAt);
+    expect(p.updatedAt).toEqual(baseProps.updatedAt);
+  });
+
+  it('defaults description to an empty string when not provided', () => {
+    const p = Product.create({ ...baseProps, description: undefined as unknown as string });
+    expect(p.description).toBe('');
+  });
+
+  it('update() keeps the current name when it is not provided', () => {
+    const p = Product.create(baseProps);
+    const updated = p.update({ available: false });
+    expect(updated.name).toBe(baseProps.name);
+    expect(updated.available).toBe(false);
+  });
+
+  it('update() applies every provided field', () => {
+    const p = Product.create(baseProps);
+    const updated = p.update({
+      name: 'Pizza XL',
+      description: 'Extra grande',
+      price: Money.fromUnits(9000),
+      category: 'BURGER',
+      available: false
+    });
+    expect(updated.name).toBe('Pizza XL');
+    expect(updated.description).toBe('Extra grande');
+    expect(updated.price.amountInCents).toBe(900000);
+    expect(updated.category).toBe('BURGER');
+    expect(updated.available).toBe(false);
+  });
 });

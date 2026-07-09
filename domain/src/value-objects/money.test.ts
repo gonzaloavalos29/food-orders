@@ -48,6 +48,28 @@ describe('Money', () => {
     it('rejects negative multiplier', () => {
       expect(() => Money.fromCents(100).multiply(-1)).toThrow(ValidationError);
     });
+
+    it('subtracts amounts of the same currency', () => {
+      const result = Money.fromCents(800).subtract(Money.fromCents(300));
+      expect(result.amountInCents).toBe(500);
+    });
+
+    it('rejects a subtraction that would go negative', () => {
+      expect(() => Money.fromCents(100).subtract(Money.fromCents(300))).toThrow(ValidationError);
+    });
+
+    it('rejects subtracting different currencies', () => {
+      const a = Money.fromCents(500, 'ARS');
+      const b = Money.fromCents(100, 'USD');
+      expect(() => a.subtract(b)).toThrow(ValidationError);
+    });
+  });
+
+  describe('formatting', () => {
+    it('toString() formats amount and currency', () => {
+      expect(Money.fromCents(1599, 'ARS').toString()).toBe('15.99 ARS');
+      expect(Money.fromCents(100, 'USD').toString()).toBe('1.00 USD');
+    });
   });
 
   describe('equality', () => {

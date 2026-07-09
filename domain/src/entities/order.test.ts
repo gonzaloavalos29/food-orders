@@ -47,6 +47,17 @@ describe('Order', () => {
     it('rejects missing userId', () => {
       expect(() => Order.create({ ...baseProps(), userId: '' })).toThrow(ValidationError);
     });
+
+    it('rejects missing id', () => {
+      expect(() => Order.create({ ...baseProps(), id: '  ' })).toThrow(ValidationError);
+    });
+
+    it('exposes createdAt and updatedAt', () => {
+      const props = baseProps();
+      const o = Order.create(props);
+      expect(o.createdAt).toEqual(props.createdAt);
+      expect(o.updatedAt).toEqual(props.updatedAt);
+    });
   });
 
   describe('status transitions', () => {

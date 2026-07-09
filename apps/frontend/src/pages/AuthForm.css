@@ -1,11 +1,11 @@
 .fo-auth {
-  max-width: 400px; margin: 40px auto; padding: 24px;
-  background: white; border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  display: flex; flex-direction: column; gap: 12px;
+  max-width: 400px; margin: 40px auto; padding: var(--fo-space-6);
+  background: var(--fo-surface); border-radius: var(--fo-radius);
+  box-shadow: var(--fo-shadow-md);
+  display: flex; flex-direction: column; gap: var(--fo-space-3);
 }
-.fo-auth label { display: flex; flex-direction: column; gap: 4px; }
+.fo-auth label { display: flex; flex-direction: column; gap: var(--fo-space-1); }
 .fo-auth input {
-  padding: 8px 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem;
+  padding: var(--fo-space-2) var(--fo-space-3); border: 1px solid var(--fo-border-input); border-radius: var(--fo-radius-sm); font-size: 1rem;
 }
-.fo-auth__error { color: #6a040f; background: #f5b9b9; padding: 8px; border-radius: 6px; }
+.fo-auth__error { color: var(--fo-err-fg); background: var(--fo-err-bg); padding: var(--fo-space-2); border-radius: var(--fo-radius-sm); }

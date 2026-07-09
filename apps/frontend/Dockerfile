@@ -1,9 +1,11 @@
 FROM node:20-alpine AS deps
+RUN corepack enable
 WORKDIR /app
-COPY package.json ./
+COPY .yarnrc.yml yarn.lock package.json ./
+COPY .yarn/releases ./.yarn/releases
 COPY domain/package.json ./domain/
 COPY apps/frontend/package.json ./apps/frontend/
-RUN npm install --workspaces --include-workspace-root
+RUN yarn install
 
 FROM node:20-alpine AS build
 WORKDIR /app

@@ -34,6 +34,16 @@ describe('User', () => {
     ).toThrow(ValidationError);
   });
 
+  it('rejects empty id', () => {
+    expect(() => User.create({ ...validProps, id: '   ' })).toThrow(ValidationError);
+  });
+
+  it('exposes passwordHash and createdAt', () => {
+    const u = User.create(validProps);
+    expect(u.passwordHash).toBe(validProps.passwordHash);
+    expect(u.createdAt).toEqual(validProps.createdAt);
+  });
+
   describe('roles & permissions', () => {
     it('CUSTOMER cannot manage products', () => {
       const u = User.create({ ...validProps, role: 'CUSTOMER' });
@@ -59,6 +69,12 @@ describe('User', () => {
     it('CUSTOMER cannot update order status', () => {
       const u = User.create({ ...validProps, role: 'CUSTOMER' });
       expect(u.canUpdateOrderStatus()).toBe(false);
+    });
+
+    it('ADMIN and STAFF can view all orders; CUSTOMER cannot', () => {
+      expect(User.create({ ...validProps, role: 'ADMIN' }).canViewAllOrders()).toBe(true);
+      expect(User.create({ ...validProps, role: 'STAFF' }).canViewAllOrders()).toBe(true);
+      expect(User.create({ ...validProps, role: 'CUSTOMER' }).canViewAllOrders()).toBe(false);
     });
   });
 });

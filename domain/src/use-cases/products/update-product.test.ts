@@ -41,4 +41,11 @@ describe('UpdateProductUseCase', () => {
     const { update } = await setup();
     await expect(update.execute(admin, { id: 'nope', name: 'X' })).rejects.toBeInstanceOf(NotFoundError);
   });
+
+  it('updates without touching the price when priceInCents is omitted', async () => {
+    const { update, created } = await setup();
+    const updated = await update.execute(admin, { id: created.id, name: 'Solo nombre' });
+    expect(updated.name).toBe('Solo nombre');
+    expect(updated.price.amountInCents).toBe(created.price.amountInCents);
+  });
 });

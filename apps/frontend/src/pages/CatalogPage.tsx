@@ -33,6 +33,7 @@ export function CatalogPage() {
   }, [category]);
 
   const handleAdd = async (p: ProductDto) => {
+    /* v8 ignore next 2 -- guarda defensiva: onAdd solo se conecta cuando hay usuario */
     if (!user) { setError('Tenés que iniciar sesión para pedir.'); return; }
     setAdding(p.id);
     try {

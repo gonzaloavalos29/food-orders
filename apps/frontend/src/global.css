@@ -1,6 +1,56 @@
+:root {
+  /* Brand */
+  --fo-navy: #1d3557;
+  --fo-red: #e63946;
+  --fo-danger: #6a040f;
+
+  /* Surfaces & text */
+  --fo-bg: #f7f7f8;
+  --fo-surface: #ffffff;
+  --fo-border: #e0e0e0;
+  --fo-border-muted: #eee;
+  --fo-border-input: #ccc;
+  --fo-text: #222;
+  --fo-text-muted: #555;
+  --fo-text-subtle: #777;
+
+  /* Feedback */
+  --fo-ok-bg: #b9f5c4;
+  --fo-ok-fg: #14532d;
+  --fo-err-bg: #f5b9b9;
+  --fo-err-fg: #6a040f;
+
+  /* Spacing scale (4px base) */
+  --fo-space-1: 4px;
+  --fo-space-2: 8px;
+  --fo-space-3: 12px;
+  --fo-space-4: 16px;
+  --fo-space-5: 20px;
+  --fo-space-6: 24px;
+
+  /* Radius */
+  --fo-radius-sm: 6px;
+  --fo-radius: 10px;
+  --fo-radius-pill: 20px;
+
+  /* Shadows */
+  --fo-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.04);
+  --fo-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+  /* Typography */
+  --fo-font: system-ui, -apple-system, sans-serif;
+  --fo-font-mono: ui-monospace, "SFMono-Regular", "Menlo", monospace;
+}
+
 * { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; background: #f7f7f8; color: #222; }
-a { color: #1d3557; }
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--fo-font);
+  background: var(--fo-bg);
+  color: var(--fo-text);
+}
+a { color: var(--fo-navy); }
 h1, h2, h3 { margin-top: 0; }
 input, select { font-family: inherit; font-size: 1rem; }
-table th, table td { padding: 8px; }
+table th, table td { padding: var(--fo-space-2); }

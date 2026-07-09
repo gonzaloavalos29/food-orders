@@ -98,4 +98,49 @@ describe('Cart', () => {
     cart = cart.addItem(makeProduct('p-2', 500), 3);  // 1500
     expect(cart.total().amountInCents).toBe(350000);
   });
+
+  it('rejects an empty userId', () => {
+    expect(() => Cart.empty('')).toThrow(ValidationError);
+    expect(() => Cart.empty('   ')).toThrow(ValidationError);
+  });
+
+  it('restores a cart from persisted items (clonando los items)', () => {
+    const items = [
+      { productId: 'p-1', productName: 'Pizza', unitPrice: Money.fromUnits(1000), quantity: 2 }
+    ];
+    const cart = Cart.restore('user-1', items);
+    expect(cart.userId).toBe('user-1');
+    expect(cart.items).toHaveLength(1);
+    expect(cart.items[0]).not.toBe(items[0]); // copia defensiva
+    expect(cart.total().amountInCents).toBe(200000);
+  });
+
+  it('rejects updating to a negative or non-integer quantity', () => {
+    let cart = Cart.empty('user-1');
+    cart = cart.addItem(makeProduct('p-1', 500), 1);
+    expect(() => cart.updateQuantity('p-1', -1)).toThrow(ValidationError);
+    expect(() => cart.updateQuantity('p-1', 1.5)).toThrow(ValidationError);
+  });
+
+  it('accumulates on an existing item leaving the others untouched', () => {
+    let cart = Cart.empty('user-1');
+    cart = cart.addItem(makeProduct('p-1', 500), 1);
+    cart = cart.addItem(makeProduct('p-2', 700), 1);
+    cart = cart.addItem(makeProduct('p-1', 500), 2); // acumula sobre p-1, p-2 intacto
+    const p1 = cart.items.find(i => i.productId === 'p-1');
+    const p2 = cart.items.find(i => i.productId === 'p-2');
+    expect(p1?.quantity).toBe(3);
+    expect(p2?.quantity).toBe(1);
+  });
+
+  it('updates one item leaving the others untouched', () => {
+    let cart = Cart.empty('user-1');
+    cart = cart.addItem(makeProduct('p-1', 500), 1);
+    cart = cart.addItem(makeProduct('p-2', 700), 2);
+    cart = cart.updateQuantity('p-1', 5);
+    const p1 = cart.items.find(i => i.productId === 'p-1');
+    const p2 = cart.items.find(i => i.productId === 'p-2');
+    expect(p1?.quantity).toBe(5);
+    expect(p2?.quantity).toBe(2);
+  });
 });

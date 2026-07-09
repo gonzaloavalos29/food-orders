@@ -9,7 +9,7 @@ import { CounterIdGenerator } from '../../__test-helpers__/counter-id-generator'
 import { FixedClock } from '../../__test-helpers__/fixed-clock';
 import { User } from '../../entities';
 import { Email } from '../../value-objects';
-import { AuthorizationError, ValidationError } from '../../errors';
+import { AuthorizationError, NotFoundError, ValidationError } from '../../errors';
 
 const admin = User.create({ id: 'a', email: Email.create('a@a.com'), passwordHash: 'h', name: 'A', role: 'ADMIN', createdAt: new Date() });
 const staff = User.create({ id: 's', email: Email.create('s@s.com'), passwordHash: 'h', name: 'S', role: 'STAFF', createdAt: new Date() });
@@ -49,5 +49,12 @@ describe('UpdateOrderStatusUseCase', () => {
     await expect(
       update.execute(admin, { orderId: order.id, nextStatus: 'DELIVERED' })
     ).rejects.toBeInstanceOf(ValidationError);
+  });
+
+  it('throws NotFoundError when the order does not exist', async () => {
+    const { update } = await setup();
+    await expect(
+      update.execute(staff, { orderId: 'nope', nextStatus: 'CONFIRMED' })
+    ).rejects.toBeInstanceOf(NotFoundError);
   });
 });

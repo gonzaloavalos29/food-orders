@@ -1,11 +1,11 @@
 .fo-row {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr auto;
-  gap: 12px;
+  gap: var(--fo-space-3);
   align-items: center;
-  padding: 8px 0;
-  border-bottom: 1px solid #eee;
+  padding: var(--fo-space-2) 0;
+  border-bottom: 1px solid var(--fo-border-muted);
 }
-.fo-row__qty { display: flex; gap: 6px; align-items: center; }
+.fo-row__qty { display: flex; gap: var(--fo-space-2); align-items: center; }
 .fo-row__qtyval { min-width: 24px; text-align: center; font-weight: 600; }
 .fo-row__price { text-align: right; }

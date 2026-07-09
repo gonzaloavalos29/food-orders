@@ -45,6 +45,7 @@ export function CartPage() {
         <CartItemRow key={item.productId} item={item} onQuantityChange={updateQty} onRemove={remove} />
       ))}
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 20, alignItems: 'center' }}>
+        {/* v8 ignore next -- items[0] siempre existe: arriba se retorna temprano si el carrito está vacío */}
         <strong>Total: <Money amountInCents={cart.totalInCents} currency={cart.items[0]?.currency ?? 'ARS'} /></strong>
         <Button size="lg" onClick={checkout}>Finalizar pedido</Button>
       </div>

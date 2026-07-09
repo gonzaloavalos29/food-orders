@@ -1,11 +1,12 @@
 FROM node:20-alpine AS deps
 RUN apk add --no-cache openssl libc6-compat
+RUN corepack enable
 WORKDIR /app
-COPY package.json ./
-COPY tsconfig.base.json ./
+COPY .yarnrc.yml yarn.lock package.json tsconfig.base.json ./
+COPY .yarn/releases ./.yarn/releases
 COPY domain/package.json ./domain/
 COPY apps/backend/package.json ./apps/backend/
-RUN npm install --workspaces --include-workspace-root
+RUN yarn install
 
 FROM node:20-alpine AS build
 RUN apk add --no-cache openssl libc6-compat

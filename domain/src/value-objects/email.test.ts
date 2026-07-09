@@ -32,4 +32,12 @@ describe('Email', () => {
   it('considers two equal emails equal', () => {
     expect(Email.create('a@b.com').equals(Email.create('A@B.COM'))).toBe(true);
   });
+
+  it('rejects a non-string input', () => {
+    expect(() => Email.create(123 as unknown as string)).toThrow(ValidationError);
+  });
+
+  it('toString() returns the normalized value', () => {
+    expect(Email.create('User@Example.com').toString()).toBe('user@example.com');
+  });
 });

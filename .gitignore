@@ -2,12 +2,14 @@ node_modules/
 dist/
 build/
 coverage/
+*.tsbuildinfo
 .env
 .env.local
 *.log
 .DS_Store
 .idea/
 .vscode/
+.claude/
 .yarn/cache
 .yarn/install-state.gz
 .yarn/build-state.yml

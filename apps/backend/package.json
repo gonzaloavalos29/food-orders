@@ -10,7 +10,7 @@
     "prisma:migrate": "prisma migrate deploy",
     "prisma:migrate:dev": "prisma migrate dev",
     "db:seed": "ts-node prisma/seed.ts",
-    "test": "echo \"no backend tests (covered by domain TDD)\""
+    "test": "exit 0"
   },
   "dependencies": {
     "@food-orders/domain": "1.0.0",

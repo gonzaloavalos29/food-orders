@@ -1,6 +1,6 @@
 .fo-btn {
   border: none;
-  border-radius: 6px;
+  border-radius: var(--fo-radius-sm);
   cursor: pointer;
   font-weight: 600;
   transition: filter 0.15s ease, transform 0.05s ease;
@@ -9,11 +9,12 @@
 .fo-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 .fo-btn:hover:not(:disabled) { filter: brightness(1.08); }
 .fo-btn:active:not(:disabled) { transform: translateY(1px); }
+.fo-btn:focus-visible { outline: 2px solid var(--fo-navy); outline-offset: 2px; }
 
-.fo-btn--primary { background: #e63946; color: white; }
-.fo-btn--secondary { background: #1d3557; color: white; }
-.fo-btn--danger { background: #6a040f; color: white; }
+.fo-btn--primary { background: var(--fo-red); color: white; }
+.fo-btn--secondary { background: var(--fo-navy); color: white; }
+.fo-btn--danger { background: var(--fo-danger); color: white; }
 
-.fo-btn--sm { padding: 4px 10px; font-size: 0.85rem; }
-.fo-btn--md { padding: 8px 16px; font-size: 1rem; }
-.fo-btn--lg { padding: 12px 24px; font-size: 1.1rem; }
+.fo-btn--sm { padding: var(--fo-space-1) var(--fo-space-3); font-size: 0.85rem; }
+.fo-btn--md { padding: var(--fo-space-2) var(--fo-space-4); font-size: 1rem; }
+.fo-btn--lg { padding: var(--fo-space-3) var(--fo-space-6); font-size: 1.1rem; }

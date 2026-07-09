@@ -46,4 +46,11 @@ describe('LoginUserUseCase', () => {
     const result = await login.execute({ email: 'ALICE@EXAMPLE.COM', password: 'password123' });
     expect(result.user.email.value).toBe('alice@example.com');
   });
+
+  it('rejects a malformed email without leaking that it is invalid', async () => {
+    const { login } = await setup();
+    await expect(
+      login.execute({ email: 'not-an-email', password: 'password123' })
+    ).rejects.toBeInstanceOf(AuthenticationError);
+  });
 });
