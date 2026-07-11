@@ -30,7 +30,6 @@ describe('Order', () => {
   describe('creation', () => {
     it('creates an order with computed total', () => {
       const o = Order.create(baseProps());
-      // 5000 * 2 + 800 * 3 = 12400
       expect(o.total.amountInCents).toBe(1240000);
       expect(o.status).toBe('PENDING');
     });

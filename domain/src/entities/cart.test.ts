@@ -94,8 +94,8 @@ describe('Cart', () => {
 
   it('computes the total across items', () => {
     let cart = Cart.empty('user-1');
-    cart = cart.addItem(makeProduct('p-1', 1000), 2); // 2000
-    cart = cart.addItem(makeProduct('p-2', 500), 3);  // 1500
+    cart = cart.addItem(makeProduct('p-1', 1000), 2);
+    cart = cart.addItem(makeProduct('p-2', 500), 3);
     expect(cart.total().amountInCents).toBe(350000);
   });
 
@@ -111,7 +111,7 @@ describe('Cart', () => {
     const cart = Cart.restore('user-1', items);
     expect(cart.userId).toBe('user-1');
     expect(cart.items).toHaveLength(1);
-    expect(cart.items[0]).not.toBe(items[0]); // copia defensiva
+    expect(cart.items[0]).not.toBe(items[0]);
     expect(cart.total().amountInCents).toBe(200000);
   });
 
@@ -126,7 +126,7 @@ describe('Cart', () => {
     let cart = Cart.empty('user-1');
     cart = cart.addItem(makeProduct('p-1', 500), 1);
     cart = cart.addItem(makeProduct('p-2', 700), 1);
-    cart = cart.addItem(makeProduct('p-1', 500), 2); // acumula sobre p-1, p-2 intacto
+    cart = cart.addItem(makeProduct('p-1', 500), 2);
     const p1 = cart.items.find(i => i.productId === 'p-1');
     const p2 = cart.items.find(i => i.productId === 'p-2');
     expect(p1?.quantity).toBe(3);

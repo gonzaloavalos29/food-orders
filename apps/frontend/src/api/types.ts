@@ -38,7 +38,7 @@ export interface CartDto {
   totalInCents: number;
 }
 
-export interface OrderItemDto extends CartItemDto {}
+export type OrderItemDto = CartItemDto;
 
 export interface OrderDto {
   id: string;

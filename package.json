@@ -8,7 +8,11 @@
     "apps/*"
   ],
   "scripts": {
+    "prepare": "git config core.hooksPath .githooks || true",
     "build": "yarn workspaces foreach -A run build",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "postmerge": "yarn install && yarn build && yarn test",
     "test": "node scripts/test-runner.mjs",
     "test:full": "node scripts/test-runner.mjs full",
     "test:coverage": "node scripts/test-runner.mjs coverage",
@@ -22,6 +26,12 @@
     "frontend:storybook": "yarn workspace @food-orders/frontend storybook"
   },
   "devDependencies": {
-    "typescript": "^5.3.3"
+    "@eslint/js": "^9",
+    "eslint": "^9",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.3",
+    "globals": "^17.7.0",
+    "typescript": "^5.3.3",
+    "typescript-eslint": "^8.63.0"
   }
 }

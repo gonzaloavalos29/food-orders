@@ -138,7 +138,7 @@ describe('api client', () => {
       'POST', 'GET', 'GET', 'GET', 'PATCH', 'POST'
     ]);
     const urls = f.mock.calls.map(c => c[0] as string);
-    expect(urls.some(u => u.endsWith('/api/orders'))).toBe(true);          // list() sin status
-    expect(urls.some(u => u.includes('/api/orders?status=READY'))).toBe(true); // list('READY')
+    expect(urls.some(u => u.endsWith('/api/orders'))).toBe(true);
+    expect(urls.some(u => u.includes('/api/orders?status=READY'))).toBe(true);
   });
 });

@@ -26,6 +26,7 @@ const WORKSPACES = [
 
 function keepLine(line) {
   if (!onlyChecks) return true; // full / coverage -> todo
+  // eslint-disable-next-line no-control-regex -- se eliminan códigos de escape ANSI
   const plain = line.replace(/\x1b\[[0-9;]*m/g, '');
   return plain.includes('✓') || plain.includes('√');
 }

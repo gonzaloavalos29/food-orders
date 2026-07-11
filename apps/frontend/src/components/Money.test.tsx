@@ -5,7 +5,6 @@ import { Money } from './Money';
 describe('Money', () => {
   it('converts cents to a major-unit currency string', () => {
     render(<Money amountInCents={123450} />);
-    // 123450 cents -> 1234.50
     expect(screen.getByText(/1\.234,50/)).toBeInTheDocument();
   });
 

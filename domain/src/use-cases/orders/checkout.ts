@@ -17,7 +17,6 @@ export class CheckoutUseCase {
     if (!cart || cart.isEmpty()) {
       throw new ValidationError('Cart is empty');
     }
-    // Re-validate availability and refresh price snapshot from current product state.
     for (const item of cart.items) {
       const product = await this.products.findById(item.productId);
       if (!product || !product.available) {

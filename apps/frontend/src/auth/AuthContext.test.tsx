@@ -3,7 +3,6 @@ import { renderHook, act, waitFor } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { AuthProvider, useAuth } from './AuthContext';
 
-// Mock the API layer so the context is tested in isolation from the network.
 vi.mock('../api/client', () => ({
   setTokenGetter: vi.fn(),
   api: {

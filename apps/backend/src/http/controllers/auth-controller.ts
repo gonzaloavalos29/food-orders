@@ -32,7 +32,7 @@ export const makeAuthController = (
 
   router.get('/me', async (req: Request, res: Response, next: NextFunction) => {
     try {
-      if (!req.user) throw new Error('unauthenticated'); // guarded by requireAuth
+      if (!req.user) throw new Error('unauthenticated');
       res.json({ user: presentUser(req.user) });
     } catch (e) { next(e); }
   });

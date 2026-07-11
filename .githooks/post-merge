@@ -1,0 +1,4 @@
+#!/bin/sh
+# Tras un merge/pull: install (regenera el Prisma Client vía postinstall),
+# build y test, para no quedar con tipos desactualizados ni código roto.
+yarn postmerge

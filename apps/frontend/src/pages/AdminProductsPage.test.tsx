@@ -1,4 +1,4 @@
-import { render, screen, waitFor, within } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { AdminProductsPage } from './AdminProductsPage';
 import { makeProduct } from '../test/factories';
@@ -30,7 +30,6 @@ describe('<AdminProductsPage>', () => {
     expect(await screen.findByText('Muzzarella')).toBeInTheDocument();
     expect(screen.getByText('Fugazzeta')).toBeInTheDocument();
     expect(h.list).toHaveBeenCalledWith({ includeUnavailable: true });
-    // marcadores de disponibilidad
     expect(screen.getByText('✓')).toBeInTheDocument();
     expect(screen.getByText('—')).toBeInTheDocument();
   });

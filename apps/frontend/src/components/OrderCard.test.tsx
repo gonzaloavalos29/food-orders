@@ -27,7 +27,6 @@ describe('OrderCard', () => {
   it('advances to the next status in the workflow', async () => {
     const onAdvance = vi.fn();
     render(<OrderCard order={baseOrder} canManage onAdvance={onAdvance} />);
-    // PENDING -> CONFIRMED
     await userEvent.click(screen.getByRole('button', { name: /Avanzar a Confirmado/ }));
     expect(onAdvance).toHaveBeenCalledWith('CONFIRMED');
   });

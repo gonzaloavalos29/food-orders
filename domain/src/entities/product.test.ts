@@ -43,7 +43,7 @@ describe('Product', () => {
     const p = Product.create(baseProps);
     const updated = p.changeAvailability(false);
     expect(updated.available).toBe(false);
-    expect(p.available).toBe(true); // immutability
+    expect(p.available).toBe(true);
   });
 
   it('updates fields with update()', () => {

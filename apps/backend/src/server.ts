@@ -18,7 +18,6 @@ export const buildServer = (container: Container): express.Express => {
 
   const attachUser = makeAuthMiddleware(container.services.tokens, container.repositories.users);
 
-  // Auth (public + /me protected)
   const authRouter = makeAuthController(container.useCases.register, container.useCases.login);
   app.use('/api/auth', (req, res, next) => {
     if (req.path === '/me') {
@@ -28,7 +27,6 @@ export const buildServer = (container: Container): express.Express => {
     next();
   }, authRouter);
 
-  // Products: list/get public; mutations require auth (use case enforces ADMIN)
   app.use(
     '/api/products',
     (req, res, next) => {
@@ -45,7 +43,6 @@ export const buildServer = (container: Container): express.Express => {
     })
   );
 
-  // Cart & Orders: always require auth
   app.use(
     '/api/cart',
     attachUser,
